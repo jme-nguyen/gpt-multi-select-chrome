@@ -1,0 +1,40 @@
+from openai import OpenAI
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+
+systemPrompt = "You are a highly intelligent assistant. The user will provide you with multiple-choice questions along with possible answers labeled A, B, C, D, etc. Your task is to analyze the question and the given options and return the letter (A-Z) corresponding with the correct answer."
+
+userPrompt = """The best way to prevent SQL injection vulnerabilities is to use _____.
+
+Question 3Select one:
+
+a.
+Microsoft SQL
+
+
+b.
+run-time detection of SQL Injection
+
+
+c.
+MySQL
+
+
+d.
+input validation that prevents mixing commands and data
+"""
+
+completion = client.chat.completions.create(
+  model="gpt-4o",
+  messages=[
+    {"role": "system", "content": systemPrompt},
+    {"role": "user", "content": userPrompt}
+  ]
+)
+
+
+print(completion.choices[0].message)
