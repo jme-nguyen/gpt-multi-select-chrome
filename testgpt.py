@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+client = OpenAI()
 
 systemPrompt = "You are a highly intelligent assistant. The user will provide you with multiple-choice questions along with possible answers labeled A, B, C, D, etc. Your task is to analyze the question and the given options and return the letter (A-Z) corresponding with the correct answer."
 
