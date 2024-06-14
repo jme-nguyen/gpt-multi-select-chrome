@@ -2,6 +2,7 @@ from openai import OpenAI
 import os
 from dotenv import load_dotenv
 
+# So as long as you have a .env file with your OpenAI API key in it, you can simply load_dotenv() to load the api key to OpenAI().
 load_dotenv()
 
 client = OpenAI()
