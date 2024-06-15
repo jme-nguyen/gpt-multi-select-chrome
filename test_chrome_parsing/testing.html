@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Highlight Text</title>
+</head>
+<body>
+    <p>This is a sample text to demonstrate dynamic text selection.</p>
+    <p>Another paragraph with some sample text for testing.</p>
+    <button onclick="highlightText('sample text')">Highlight 'sample text'</button>
+    <button onclick="highlightText('emonstrat')">Highlight 'demonstrate'</button>
+
+    <script>
+        function highlightText(searchText) {
+            // Helper function to recursively search for text in the DOM
+            function searchNodes(node) {
+                if (node.nodeType === Node.TEXT_NODE) {
+                    const startIndex = node.textContent.indexOf(searchText);
+                    if (startIndex !== -1) {
+                        const range = document.createRange();
+                        range.setStart(node, startIndex);
+                        range.setEnd(node, startIndex + searchText.length);
+
+                        const selection = window.getSelection();
+                        selection.removeAllRanges();
+                        selection.addRange(range);
+                        return true; // Stop searching once the text is found and highlighted
+                    }
+                } else if (node.nodeType === Node.ELEMENT_NODE) {
+                    for (let child of node.childNodes) {
+                        if (searchNodes(child)) {
+                            return true;
+                        }
+                    }
+                }
+                return false;
+            }
+
+            // Start searching from the body element
+            if (!searchNodes(document.body)) {
+                alert(`Text "${searchText}" not found!`);
+            }
+        }
+    </script>
+</body>
+</html>

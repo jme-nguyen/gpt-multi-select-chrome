@@ -1,0 +1,13 @@
+{
+    "manifest_version": 3,
+    "name": "parse highlighted text",
+    "description": "parse highlighted text",
+    "version": "1.0",
+    "permissions": ["activeTab"],
+    "content_scripts": [
+        {
+            "matches": ["<all_urls>"],
+            "js": ["content.js"]
+        }
+    ]
+}
