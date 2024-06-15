@@ -5,8 +5,8 @@ function handleKeydown(event) {
       // Get the selected text
       const selectedText = window.getSelection().toString();
       if (selectedText) {
-        cutText = selectedText.slice(2,-2);
-        // hightlightText(cutText);
+        cutText = selectedText.slice(295,-58);
+        console.log(cutText);
         refineSelection(cutText);
       } else {
         console.log('No text selected.');
@@ -17,55 +17,60 @@ function handleKeydown(event) {
   // Add event listener for keydown events
 document.addEventListener('keydown', handleKeydown);
 
-  function hightlightText(searchText){
-    searchNodes(document.body, searchText);
+function refineSelection(substring) {
+  const selection = window.getSelection();
+  if (selection.rangeCount > 0) {
+      const range = selection.getRangeAt(0);
+      const selectedText = range.toString();
+      const startIndex = selectedText.indexOf(substring);
+
+      if (startIndex !== -1) {
+          const start = findNodeAtOffset(range, startIndex);
+          const end = findNodeAtOffset(range, startIndex + substring.length);
+
+          if (start && end) {
+              const newRange = document.createRange();
+              newRange.setStart(start.node, start.offset);
+              newRange.setEnd(end.node, end.offset);
+              
+              selection.removeAllRanges();
+              selection.addRange(newRange);
+          }
+      }
+  }
+}
+
+function findNodeAtOffset(range, targetOffset) {
+  let currentNode = range.startContainer;
+  let currentOffset = range.startOffset;
+
+  while (currentNode && targetOffset > 0) {
+      if (currentNode.nodeType === Node.TEXT_NODE) {
+          const textLength = currentNode.textContent.length;
+          if (targetOffset <= textLength) {
+              return { node: currentNode, offset: currentOffset + targetOffset };
+          } else {
+              targetOffset -= (textLength - currentOffset);
+              currentOffset = 0;
+              currentNode = nextNode(currentNode);
+          }
+      } else {
+          currentNode = nextNode(currentNode);
+      }
   }
 
-
-function searchNodes(node, searchText) {
-if (node.nodeType === Node.TEXT_NODE) {
-    console.log(node.textContent);
-    const startIndex = node.textContent.indexOf(searchText);
-    if (startIndex!== -1) {
-        const range = document.createRange();
-        range.setStart(node, startIndex);
-        range.setEnd(node, startIndex + searchText.length);
-        console.log(range);
-
-        const selection = window.getSelection();
-        selection.removeAllRanges();
-        selection.addRange(range);
-        return true;
-    }
-}
-else if (node.nodeType === Node.ELEMENT_NODE) {
-    for (let child of node.childNodes) {
-        if (searchNodes(child, searchText)) {
-            return true;
-        }
-    }
-}
-return false;
+  return null;
 }
 
-function refineSelection(substring){
-    const selection = window.getSelection();
-    if (selection.rangeCount > 0) {
-        const range = selection.getRangeAt(0);
-        const selectedText = selection.toString();
-
-        const startIndex = selectedText.indexOf(substring);
-        if (startIndex!== -1) {
-            const newRange = document.createRange();
-            const startNode = range.startContainer;
-            const endNode = range.endContainer;
-            const startOffset = range.startOffset + startIndex;
-            const endOffset = startOffset + substring.length;
-
-            newRange.setStart(startNode, startOffset);
-            newRange.setEnd(endNode, endOffset);
-            selection.removeAllRanges();
-            selection.addRange(newRange);
-        }
-    }
+function nextNode(node) {
+  if (node.firstChild) {
+      return node.firstChild;
+  }
+  while (node) {
+      if (node.nextSibling) {
+          return node.nextSibling;
+      }
+      node = node.parentNode;
+  }
+  return null;
 }
