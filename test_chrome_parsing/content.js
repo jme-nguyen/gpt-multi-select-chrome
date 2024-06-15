@@ -5,9 +5,10 @@ function handleKeydown(event) {
       // Get the selected text
       const selectedText = window.getSelection().toString();
       if (selectedText) {
-        cutText = selectedText.slice(295,-58);
-        console.log(cutText);
-        refineSelection(cutText);
+        // cutText = selectedText.slice(295,-58);
+        // console.log(cutText);
+        // refineSelection(cutText);
+        gptProcessing(selectedText);
       } else {
         console.log('No text selected.');
       }
@@ -73,4 +74,21 @@ function nextNode(node) {
       node = node.parentNode;
   }
   return null;
+}
+
+function gptProcessing(question) {
+  fetch('http://localhost:8080/multi', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ question })
+    })
+    .then(response => response.json())
+    .then(result => {
+      console.log('Success:', result);
+    })
+    .catch(error => {
+      console.error('Error:', error);
+    })
 }
