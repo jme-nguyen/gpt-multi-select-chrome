@@ -1,8 +1,16 @@
 const express = require("express");
 const cors = require("cors");
+const OpenAI = require("openai");
+require("dotenv").config(); // Load environment variables from.env file
 
 const app = express();
 const port = 8080;
+
+const openai = new OpenAI({
+    apiKey: process.env.OPENAI_API_KEY
+});
+
+const systemPrompt = "You are a highly intelligent assistant. The user will provide you with multiple-choice questions along with possible answers labeled A, B, C, D, etc. Your task is to analyze the question and the given options and return the letter (A-Z) corresponding with the correct answer."
 
 const corsOptions = {
     methods: ["POST"],
@@ -16,15 +24,34 @@ app.listen(port, () => {
 
 app.use(express.json());
 
-app.post('/multi', (req, res) => {
+app.post('/multi', async (req, res) => {
     const data = req.body.question;
-    const parsedata = parseMCQ(data);
+    // const parsedata = parseMCQ(data);
+    const reply = await askGPT(data);
+    console.log("reply:", reply)
 
     // Respond to the request
-    resjson = JSON.stringify(parsedata);
+    resjson = JSON.stringify(reply);
     res.status(200).send(resjson);
 })
 
+async function askGPT(question) {
+    const completion = await openai.chat.completions.create({
+        messages: [
+            {role: "system", content: systemPrompt},
+            {role: "user", content: question}
+        ],
+        model: "gpt-4o"
+    })
+
+    console.log(completion.choices[0].message.content);
+    return completion.choices[0].message.content;
+}
+
+/*
+    Function may not be used as flexibility in chrome extension is limited using this method.
+    If ChatGPT formatting is not as inticipated this method may be used.
+*/
 function parseMCQ(input) {
     // Regular expressions for each style
     const style1 = /^(.*?)\nGroup of answer choices\n\n(.+?)$/s;
