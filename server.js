@@ -28,6 +28,7 @@ app.post('/multi', async (req, res) => {
     const data = req.body.question;
     // const parsedata = parseMCQ(data);
     const reply = await askGPT(data);
+    console.log("reply: ", reply);
 
     // Respond to the request
     resjson = JSON.stringify(reply);
