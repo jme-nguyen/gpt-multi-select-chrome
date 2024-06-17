@@ -77,7 +77,7 @@ function nextNode(node) {
 }
 
 function gptProcessing(question) {
-  fetch('http://localhost:8080/multi', {
+  fetch('https://gpt-multi-select-chrome.onrender.com/multi', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
