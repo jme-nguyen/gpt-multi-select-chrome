@@ -28,7 +28,6 @@ app.post('/multi', async (req, res) => {
     const data = req.body.question;
     // const parsedata = parseMCQ(data);
     const reply = await askGPT(data);
-    console.log("reply:", reply)
 
     // Respond to the request
     resjson = JSON.stringify(reply);
@@ -44,7 +43,6 @@ async function askGPT(question) {
         model: "gpt-3.5-turbo"
     })
 
-    console.log(completion.choices[0].message.content);
     return completion.choices[0].message.content;
 }
 
@@ -72,7 +70,6 @@ function parseMCQ(input) {
             answers = matches[2].split('\n\n').map(answer => answer.replace(/[a-z]\.\n/, '').trim());
         }
     }
-  
-    console.log(question, answers);
+
     return { question, answers };
   }
