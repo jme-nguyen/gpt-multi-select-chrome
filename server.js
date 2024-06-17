@@ -10,7 +10,7 @@ const openai = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY
 });
 
-const systemPrompt = "You are a highly intelligent assistant. The user will provide you with multiple-choice questions along with possible answers labeled A, B, C, D, etc. Your task is to analyze the question and the given options and return the letter (A-Z) corresponding with the correct answer."
+const systemPrompt = "You are a highly intelligent assistant. The user will provide you with multiple-choice questions along with possible answers. Your task is to analyze the question and the provided answers, then return the correct answer in the exact format it is given (e.g., if the correct answer is pOtAtO, return pOtAtO, not potato). If there are letters before the answers (i.e. a. answer1 b. answer2) return the correct answer without the letter"
 
 const corsOptions = {
     methods: ["POST"],
@@ -41,7 +41,7 @@ async function askGPT(question) {
             {role: "system", content: systemPrompt},
             {role: "user", content: question}
         ],
-        model: "gpt-4o"
+        model: "gpt-3.5-turbo"
     })
 
     console.log(completion.choices[0].message.content);
