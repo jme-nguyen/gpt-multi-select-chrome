@@ -41,7 +41,7 @@ async function askGPT(question) {
             {role: "system", content: systemPrompt},
             {role: "user", content: question}
         ],
-        model: "gpt-4o"
+        model: "gpt-3.5-turbo"
     })
 
     return completion.choices[0].message.content;
