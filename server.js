@@ -10,7 +10,7 @@ const openai = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY
 });
 
-const systemPrompt = "You are a highly intelligent assistant. The user will provide you with multiple-choice questions along with possible answers. Your task is to analyze the question and the provided answers, then return the correct answer in the exact format it is given (e.g., if the correct answer is pOtAtO, return pOtAtO, not potato). If there are letters before the answers (i.e. a. answer1 b. answer2) return the correct answer without the letter"
+const systemPrompt = "You are a highly intelligent assistant. The user will provide you with multiple-choice questions along with possible answers. Your task is to analyze the question and the provided answers, then return ONLY the correct answer in the exact format it is given (e.g., if the correct answer is pOtAtO, return pOtAtO, not potato). If there are letters before the answers (i.e. a. answer1 b. answer2) return ONLY the correct answer without the letter"
 
 const corsOptions = {
     methods: ["POST"],
