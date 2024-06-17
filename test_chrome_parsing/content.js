@@ -85,9 +85,7 @@ function gptProcessing(question) {
     body: JSON.stringify({ question })
     })
     .then(response => response.json())
-    .then(result => {
-      console.log('Success:', result);
-    })
+    .then(result => refineSelection(result))
     .catch(error => {
       console.error('Error:', error);
     })
